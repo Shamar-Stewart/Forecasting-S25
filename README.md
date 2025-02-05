@@ -3,7 +3,7 @@ This is the landing page for Applied Economic Forecasting—Spring 2025. I will 
 
 | Lecture | Topic                                	                        |  Remarks                                	                        |
 |---------	|:-----------------------------------------------------------:| :----------------------------------------------------------------|  
-| 1       	| [Introduction to Forecasting](Lecture/L1/1.Intro_Time_Series.pdf) <br> R & R Markdown 	| HW 0.1 -- ggplot2 (Datacamp): Due Feb 3, 2025, 11:59 PM <br> HW 0.2 -- Intro to R (Datacamp): Due Feb 3, 2025, 11:59 PM <br> HW 0.3 -- Tidyverse (Datacamp): Due Feb 5, 2025, 11:59 PM                               |  
+| 1       	| [Introduction to Forecasting](Lecture/L1/1.Intro_Time_Series.pdf) <br> [R Markdown](https://htmlpreview.github.io/?https://github.com/Shamar-Stewart/Forecasting-S25/blob/c7b8931cc74946d9682f194164781896a7b352e1/Lecture/L1/RMarkdown_Intro.html) 	| HW 0.1 -- ggplot2 (Datacamp): Due Feb 3, 2025, 11:59 PM <br> HW 0.2 -- Intro to R (Datacamp): Due Feb 3, 2025, 11:59 PM <br> HW 0.3 -- Tidyverse (Datacamp): Due Feb 5, 2025, 11:59 PM                               |  
 | 2       	|     [Exploring & Visualizing Time Series](Lecture/L2/2-Visualizing-Time-Series.pdf)     	|                                |
 |         	|                                              	|                                |
 |         	|           ***Univariate Models***           	|                                |
