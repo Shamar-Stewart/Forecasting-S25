@@ -1,0 +1,108 @@
+---
+title: 'AAEC 4484/ STAT(AAEC) 5484: Applied Economic Forecasting'
+author: Your Name Here
+date: |
+    Homework #1 - Spring `r format(Sys.Date(),"%Y")` 
+output: 
+  pdf_document:
+    keep_tex: no
+
+header-includes:
+ \usepackage{float} #fixes position of figures
+geometry: margin=0.8in # sets the page margins
+
+---
+
+```{r setup, include=FALSE}
+library(fpp3)
+library(patchwork)
+theme_set(theme_light()) # change if you would like.
+knitr::opts_chunk$set(echo=TRUE, fig.pos = 'H',
+                      size= "footnotesize",
+                      message=FALSE, warning = FALSE)
+```
+
+This assignment aims to enhance your understanding of time series and data patterns. It is intended to be straightforward.
+
+**Instructions**: 
+
+**Please ensure that your graphs and visuals have proper titles and axis labels. Recall that you can use `help()` or `?seriesname` in your consoles to get general information on the dataset**. 
+
+## Question 1: Basic Visualization of Time Series Data
+
+i. Create time plots of the following time series: `Bricks` from `aus_production`, `Lynx` from `pelt`, `High` for `AMZN` from `gafa_stock`, `Demand` **for 2014** from `vic_elec`. **Note: In class, we used the `patchwork` package to arrange our plots using `+` and `/`. This package also allows for more control over the arrangement of plots. One such function is `wrap_plots()`. Use this function to arrange your plots in a 2x2 grid.**
+
+
+ii. Briefly discuss any discernible pattern(s) you noticed in the data.
+
+\newpage 
+
+# Question 2: Data Sampling
+
+In class, we explored the idea of drawing a random sample of data. The exercise below offers another practical demonstration.
+
+The `aus_retail` data set contains monthly retail turnover data for various industries and states in Australia. We will pull a random Industry by way of its `Series ID` and explore the data.
+
+i. In the code chunk below, set a seed of your choice to ensure you generate a reproducible draw of the data. Next, use some combination of the `filter()` and `sample()` functions to draw a random sample of the data.
+
+```{r, eval=FALSE, include=FALSE}
+# Remove the eval = FALSE argument from the code chunk in order to run your codes.
+
+set.seed(xxxx) #Set this to your preferred seed
+
+```
+
+i. Use the `autoplot()`, `gg_season()`, `gg_subseries()`, and `ACF() %>% autoplot()` functions to explore possible seasonality in your chosen sample.
+
+- Again use the `patchwork` package to arrange your plots as grids. **You are free to organize them however you wish.**
+
+- **It might be useful to change the `lag_max` (how about to 3 years of data?) in the ACF to ensure that you can see a fair bit of the pattern in the correlogram.** 
+
+ii. What can you say about the series? Are there any seasonal patterns? Trends?
+
+
+
+\newpage
+
+# Question 3: White Noise
+
+The `aus_livestock` series contains data on monthly "Meat production in Australia for human consumption". 
+
+i. Using the `filter()` function, extract the number of **Cows and heifers** slaughtered in **Tasmania**. Store this variable as `cows`.
+
+
+ii. Produce the `autoplot()` of `cows` and its correlogram. **Comment on any pattern noticed in both.** Does this series look like white noise? **Explain your answer.**
+
+
+iii. Now, using the `difference()` and `mutate()` functions, create a new column, `diff`, that computes the **month-to-month** changes (`lag = 1`) in your `cows` series. Store this new data as `d.cows`.
+
+
+iv. Produce an `autoplot()` of `diff` along with the associated correlogram. Does the first differenced data now look like white noise? Did differencing remove any potential seasonality in the data? How about any trend?
+**Recall that a simple yes will not suffice. You will need to explain your conclusion.**
+
+
+
+v. Return to the `cows` series and again use the `difference()` and `mutate()` functions to create a new column called `diff12` that computes the **year-on-year** changes (`lag = 12`) in your `cows` series. Store this new data as `d12.cows`. 
+
+
+
+vi. Produce an `autoplot` of `diff12` along with the associated correlogram. 
+
+a. Does this new data, differenced at lag12, now look like white noise? **Recall that a simple yes will not suffice. You will need to explain your conclusion.**
+
+b. Did differencing remove all potential seasonality or trend in the data? If not, how would you solve this? **You are not required to show this. An intelligent answer based on the plots and your observations will suffice.**
+
+
+\newpage
+
+# Question 4: Gasoline Supplied in the US
+
+Using the following graphics functions: `autoplot()`, `gg_subseries()`, `ACF()`, explore the features of `Barrels` from `us_gasoline`. **Hint: You may want to use the `lag_max` of about 3 years (accounting for the data frequency) in the `ACF()` function to ensure you can see a fair bit of the pattern in the correlogram.**
+
+- Can you spot any seasonality, cyclicity and trend?
+- What do you learn about the series?
+- What can you say about the seasonal patterns?
+- Can you identify any unusual years?
+
+
+
