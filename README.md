@@ -8,7 +8,7 @@ This is the landing page for Applied Economic Forecasting—Spring 2025. I will 
 |         	|                                              	|                                |
 |         	|           ***Univariate Models***           	|                                |
 | 3       	|           [Basic Forecasting Models](Lecture/L3/3.Evaluation_of_Basic_Forecasting_Models.pdf)          	|  [HW2 (RMD): Due Mar 10, 2025 -- 2:30 PM](HW/HW2/AAEC_4484-AAEC_STAT-5484_HW2_S25_Empty.Rmd) <br> [HW2 (PDF)](HW/HW2/AAEC_4484-AAEC_STAT-5484_HW2_S25_Empty.pdf)                              |
-| 4       	|   Linear & Dynamic Time Series Regressions  	|                                |
+| 4       	|   Time Series Regressions  	|                                |
 | 5       	|          Time Series Decompositions         	|                                |
 |         	|         **Exam 1 -- March 5, 2025**         	|                                |
 |         	|     **SPRING BREAK: March 8 -- 16, 2025**    	|                                |
