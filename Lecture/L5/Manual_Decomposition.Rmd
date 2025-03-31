@@ -1,0 +1,246 @@
+---
+title: "Classical Decomposition of Time Series Data"
+output:
+  html_notebook:
+    highlight: monochrome
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+
+---
+
+
+
+```{r setup, echo=FALSE}
+rm(list=ls())
+library(fpp3)
+theme_set(theme_bw())
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, 
+                      message=FALSE)
+```
+
+## Introduction
+
+The purpose of this `R Notebook file` is to understand the classical decomposition of time series data. Here, we will manually decompose **an additive** time series data.
+
+The notion would be similar for a multiplicative series, except subtractions would be replaced by divisions and additions by subtractions. If you think of the additive form as the log of the multiplicative specification, this should make a lot of sense to you, the reader.
+
+## Data
+
+We will be focusing on the Retail Trade Employment (starting January 1990) from the `us_employment` data for this analysis.
+
+Our first task is to plot the data:
+
+```{r us_retail}
+
+us_retail_employment <- us_employment %>%
+  filter_index("1990 Jan"~.) %>%
+  filter(Title == "Retail Trade")  %>% 
+  select(-Series_ID)
+
+autoplot(us_retail_employment, Employed) + 
+  labs(title = "Employment in U.S Retail Trade")
+```
+
+## Procedure for decomposing the series
+
+### Step 1: Detect the trend-cycle component using a centered Moving Average
+
+Rule of thumb: 
+: If m is even, we will need to use a $2 \times m-MA$ to extract the trend-cycle component, $\hat{\text{T}}$.
+: If m is odd, we will use a $m-MA$ to extract the trend-cycle component, $\hat{\text{T}}$.
+
+```{r ma_calc}
+
+us_retail_employment <- us_retail_employment %>% mutate(
+  `12-MA` = slider::slide_dbl(Employed, mean,
+                              .before = 5, .after = 6, 
+                              .complete = TRUE),
+  # Compute our trend-cycle (T_t)
+  `2x12-MA` = slider::slide_dbl(`12-MA`, mean,
+                              .before = 1, .after = 0, 
+                              .complete = TRUE)
+)
+
+```
+
+If we put both together, we can see what the trend-cycle looks like compared to the data.
+
+```{r}
+us_retail_employment %>% autoplot(Employed) +
+  geom_line(aes(x = Month, y = `2x12-MA`), col = "hotpink",
+            cex = .8) + 
+  labs(title = "U.S Retail Trade Employment",
+       subtitle = "Trend-Cycle Component: 2x12-MA")
+```
+
+Notice that there are fluctuations around the trend-cycle. Given what we know about the components of time series data, that would mean that the sources of these fluctuations are the seasonality and irregular (remainder) components.
+
+---
+
+#### What about other Trend methods?
+
+For ease of plotting and to keep our syntax manageable, I will use the `plot()` function in base `R` (functions loaded into R by default). This would be a good time to remind you that the `autoplot()` function was from the `fpp3` package and thus not a part of base `R`.
+
+```{r tend-lowess, results='hold'}
+low1 <-  us_retail_employment$Employed %>% lowess(.,f=2/3)
+low2 <-  us_retail_employment$Employed %>% lowess(.,f=1/3)
+low3 <-  us_retail_employment$Employed %>% lowess(.,f=0.15)
+
+us_retail_employment$Employed %>% 
+  plot(., type = "l", main = "Retail Employment",
+       sub = "Trend-Cycle Extracted using Lowess", ylab = NULL)
+lines(low1, lty = 2, lwd = 3, col = "red")
+lines(low2, lty = 3, lwd = 3, col = "blue")
+lines(low3, lty = 4, lwd = 3, col = "darkgreen")
+```
+
+**Takeaways from Graph**
+
+- We see that the frequency of `f = 0.15` extracts a trend fairly similar to the moving average model we identified above. 
+
+- The larger the `f` value we use, the less the wiggles in the trend-cycle component.
+
+---
+
+### Step 2: Detrend the Series
+
+*Detrending* the series simply means that we are removing the underlying long-term pattern in the data.
+
+Using the identity below, we have
+
+\begin{align}
+Y_t & = S_t + T_t + R_t\\
+\Rightarrow \underbrace{\boxed{Y_t - T_t}}_{\text{detrended y}} &=  S_t  + R_t
+\end{align}
+
+```{r detrended}
+
+us_retail_employment <- us_retail_employment %>% 
+  mutate(employed_detrend = Employed - `2x12-MA`)
+
+us_retail_employment %>% autoplot(employed_detrend) + 
+  labs(title = "Employment in US Retail",
+       subtitle = "Detrended")
+```
+
+### Step 3: Get the average seasonality across the `seasons`.
+
+**The classical decomposition assumes that the seasonal component will repeat itself across the length of the series**. 
+The classical decomposition does not allow for the seasonal component to differ across time. Looking at the data, you can quickly see how this assumption could be violated.
+
+
+Instead of subsetting and creating seasonal indices, we can use a Time Series Regression model to extract the seasonal component ($S_t$) that remains in the detrended data from Step 2.
+
+**Recall that in this context, we would would be interested in the fitted values since these would represent how much seasons explain the `employed_detrend` variable.**
+
+```{r}
+reg.mod <- us_retail_employment %>% model(
+  TSLM(employed_detrend~ season())
+)
+us_retail_employment <-  left_join(us_retail_employment, fitted(reg.mod), by = "Month") %>% select(-.model)
+
+us_retail_employment %>% autoplot(.fitted) + 
+  ggtitle(bquote("Plot of Seasonal Component -"~S[t]))
+```
+
+We see that the regression assumes that the seasons remain fixed over the sample period. **Does this necessarily hold in your view?**
+
+### Step 4: Get the remainder Component
+
+We can achieve this by manipulating the identity below:
+
+\begin{align}
+Y_t & = S_t + T_t + R_t\\
+\Rightarrow R_t &= Y_t - S_t - T_t 
+\end{align}
+
+
+I will also use this opportunity to rename my variables in the dataset.
+```{r calc.rem}
+
+employ_final <- us_retail_employment %>% 
+  rename(Tt = `2x12-MA`,
+         St = .fitted) %>% 
+  mutate(Rt = Employed - Tt - St)
+  
+employ_final %>% autoplot(Rt) + 
+  labs(title = "Remainder Commponent of Decomposition")
+```
+
+#### Did we do it right?
+
+At first glance the exercise may seem tedious and potentially confusing, but it demonstrates the additive decomposition of a time series from the notes, $y_t = S_t + T_t + R_t$. 
+
+We will check whether our decomposition is accurate below. If it is, the original data and the sum of our decomposition should be equal, fully on the $45^o$ line
+
+```{r}
+employ_final %>% mutate(`test_yt` = Tt + St + Rt) %>% 
+  ggplot(aes(x = Employed, y = `test_yt`)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, col = "red") +
+  labs(y = bquote(y[t] == hat(S)[t] + hat(T)[t] + hat(R)[t]),
+       x = "Employed", title = "Decomposition Cross validation")
+
+```
+
+## Decomposition
+
+Now that we have all three (3) components of the decomposition, we can plot them together. We will also compare the results against `R`'s `decompose` function.
+
+```{r compare.plots}
+# Manually:
+g1 <- employ_final %>% select(Month, Employed,Tt,St,Rt) %>% pivot_longer(-Month) %>% 
+  mutate(name = factor(name,
+         levels=c("Employed","Tt", "St", "Rt"))) %>% 
+  ggplot(aes(x = Month, y = value, col = name)) +
+  geom_line() + 
+  facet_wrap(name~., scales = "free_y", 
+             strip.position = "right", ncol = 1) +
+  theme(legend.position = 'none') + 
+  labs(title = "My Manual Decomposition", y = NULL)
+
+# Using the Package: 
+g2 <- us_retail_employment %>% model(
+  classical_decomposition(Employed, type = "additive")) %>% 
+  components() %>% autoplot() + 
+  ggtitle("Using the Decompose Function")
+gridExtra::grid.arrange(g1,g2, ncol=2)
+```
+
+Barring the start and end of our seasonal components, the two decompositions are largely the same. We lost the first and last 6 observations due to our centered moving average approach for extracting the Trend-cycle component.
+
+## Seasonally Adjusted Data
+
+If the seasonal component ($S_t$) is removed from the original data, What is left is referred to as the “seasonally adjusted” or "deseasonalized" data. As economists, we are often times more interested in the connection of the data to the state of the macro-economy than seasonal influences. Think (un)employment data-- we are more interested in the connections to the underlying state of the economy than we are with seasonal variations.
+
+- **For an additive model, the seasonally adjusted data are given by $y_t - S_t$,** and 
+- **for multiplicative data, the seasonally adjusted values are obtained using $\frac{y_t}{S_t}$.**
+
+```{r seas.adj}
+
+employ_final %>% mutate(`Employed Seasonally Adjusted` = 
+                          Employed - St) %>% 
+  autoplot(Employed, col = "darkgray") +
+  geom_line(aes(x = Month, y = `Employed Seasonally Adjusted`),
+            col = "#0072B2") +
+  labs(title = "Employment in US Retail", 
+       subtitle = "Seasonally Adjusted", y = NULL)
+
+```
+
+Similarly, we can extract and plot the seasonally adjusted series from the decompose function using the syntax below:
+
+```{r seasadj-decompose}
+us_retail_employment %>% model(
+  classical_decomposition(Employed, type = "additive")) %>% 
+  components() %>% 
+  ggplot(aes(x = Month)) +
+  geom_line(aes(y = Employed), col = "darkgray") +
+  geom_line(aes(y = season_adjust) ,col = "#0072B2") + 
+  labs(title = "Employment in US Retail",
+       subtitle = "Seasonally Adjusted", y = NULL)
+```
+
+
+
