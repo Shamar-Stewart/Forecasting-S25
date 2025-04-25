@@ -12,7 +12,7 @@ This is the landing page for Applied Economic Forecasting—Spring 2025. I will 
 |         	|     **SPRING BREAK: March 8 -- 16, 2025**    	|                                |
 | 5       	|          [Time Series Decompositions](Lecture/L5/5.Time_Series_Decomposition.pdf)         	| [HW4 (RMD): **Due Apr 16, 2025 -- 2:30 PM**](HW/HW4/AAEC_4484-AAEC_STAT-5484_HW4_S25_Empty.Rmd) <br> [HW4 (PDF)](HW/HW4/AAEC_4484-AAEC_STAT-5484_HW4_S25_Empty.pdf)                               |
 |         	|         **Exam 1 -- April 11, 2025 (8:00 AM - 7:59AM)**         	|   **See Canvas**                             |
-| 7       	|        [ARIMA & Seasonal ARIMA Models](Lecture/L7/7.ARIMA_Models.pdf)        	|                                |
+| 7       	|        [ARIMA & Seasonal ARIMA Models](Lecture/L7/7.ARIMA_Models.pdf)        	|   [HW5 (RMD): **Due May 2, 2025 -- 2:30 PM**](HW/HW5/AAEC_4484_5484_HW5_S25_Empty.Rmd) <br> [HW5 (PDF)](HW/HW5/AAEC_4484_5484_HW5_S25_Empty.pdf)                             |
 |         	|                                              	|                                |
 |         	|          ***Multivariate Models***          	|                                |
 | 8       	|              VAR & SVAR Models              	|                                 |     
