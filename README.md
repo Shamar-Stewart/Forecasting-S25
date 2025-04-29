@@ -16,6 +16,6 @@ This is the landing page for Applied Economic Forecasting—Spring 2025. I will 
 |         	|                                              	|                                |
 |         	|          ***Multivariate Models***          	|                                |
 | ~8~       	|             ~VAR & SVAR Models~             	|                                 |     
-| ~9~       	|              [Volatility Models (GARCH)](Lecture/L8/8.G-ARCH-_Models.pdf)              	|                                |
+| ~9~       	|              Volatility Models (GARCH)<br> [Class Notes](Lecture/L8/8.G-ARCH-_Models.pdf)  <br> [Primer + Multivariate GARCH](Lecture/L8/M-M_Intro_to_Time_Series_and_Forecasting_v2.pdf)           	|                                |
 | ~10~      	|      ~Forecast Evaluation & Combination~      	|                                 |        
 |         	|           **EXAM 2 - May 7, 2025**          	|                                |    
