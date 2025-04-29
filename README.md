@@ -15,7 +15,7 @@ This is the landing page for Applied Economic Forecasting—Spring 2025. I will 
 | 7       	|        [ARIMA & Seasonal ARIMA Models](Lecture/L7/7.ARIMA_Models.pdf)        	|   [HW5 (RMD): **Due May 2, 2025 -- 2:30 PM**](HW/HW5/AAEC_4484_5484_HW5_S25_Empty.Rmd) <br> [HW5 (PDF)](HW/HW5/AAEC_4484_5484_HW5_S25_Empty.pdf)                             |
 |         	|                                              	|                                |
 |         	|          ***Multivariate Models***          	|                                |
-| 8       	|              VAR & SVAR Models              	|                                 |     
-| 9       	|              Volatility Models              	|                                |
-| 10      	|      Forecast Evaluation & Combination      	|                                 |        
+| ~8~       	|             ~VAR & SVAR Models~             	|                                 |     
+| ~9~       	|              [Volatility Models (GARCH)](Lecture/L8/8.G-ARCH-_Models.pdf)              	|                                |
+| ~10~      	|      ~Forecast Evaluation & Combination~      	|                                 |        
 |         	|           **EXAM 2 - May 7, 2025**          	|                                |    
